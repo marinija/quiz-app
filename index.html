@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+    <section class="starting">
+        <h1 class="title">Start your quiz game</h1>
+        <p>Select Category:</p>
+        <select id="categories">
+            <option value="any">Any Category</option>
+            <option value="12">Entertainment: Music</option>
+            <option value="14">Entertainment: Television</option>
+            <option value="15">Entertainment: Video Games</option>
+            <option value="17">Science &amp; Nature</option>
+            <option value="18">Science: Computers</option>
+            <option value="22">Geography</option>
+            <option value="23">History</option>
+        </select>
+        <br>
+        <br>
+        <button class="btn-start" type="submit">START Quiz!</button>
+
+        <p class="last-played"></p>
+    </section>
+    <main class="game">
+        <h1>Quiz Time</h1>
+        <div class="wrapper">
+            <div class="quiz-container">
+                <div id="quiz"></div>
+            </div>
+            <div class="buttons">
+                <button id="previous">Previous Question</button>
+                <button id="next">Next Question</button>
+                <button id="submit">Submit Quiz</button>
+            </div>
+        </div>
+    </main>
+    <section class="end-screen">
+        <h1 class="title">You have scored:</h1>
+        <div id="results"></div>
+        <br>
+        <br>
+        <button id="start-again">Start Again</button>
+    </section>
+    <script src="scripts/scripts.js"></script>
+</body>
+
+</html>
