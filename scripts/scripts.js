@@ -5,16 +5,22 @@ const submitButton = document.getElementById('submit');
 let myQuestions = [];
 let currentSlide = 0;
 const selectCategory = document.getElementById('categories');
-const startGame = document.querySelector('.btn-start');
+const startGameBtn = document.querySelector('.btn-start');
 const gameScreen = document.querySelector('.game');
 const startingScreen = document.querySelector('.starting');
 const endingScreen = document.querySelector('.end-screen');
 const startAgain = document.getElementById('start-again');
 const latestScore = document.querySelector('.last-played');
+const timeEl = document.getElementById('time');
+
+// Init time
+let time = 10;
 
 // Pagination
-const previousButton = document.getElementById("previous");
 const nextButton = document.getElementById("next");
+
+// Start counting down
+let timeInterval = 0;
 
 window.addEventListener('DOMContentLoaded', (event) => {
     latestScore.innerHTML = window.sessionStorage.getItem('userScore') ? 'Your latest score is: ' + window.sessionStorage.getItem('userScore') : '';
@@ -36,11 +42,11 @@ function buildQuiz() {
             answers.push(
                 ` <form>
                 <label class="input-container">True
-                    <input type="radio" name="question${questionNumber}" id="answer" value="True">
+                    <input type="radio" name="question${questionNumber}" value="True">
                     <span class="checkmark"></span>
                 </label>
                 <label class="input-container">False
-                    <input type="radio" name="question${questionNumber}" id="answer" value="False">
+                    <input type="radio" name="question${questionNumber}" value="False">
                     <span class="checkmark"></span>
                 </label>
             </form>`
@@ -61,14 +67,26 @@ function buildQuiz() {
     quizContainer.innerHTML = output.join('');
 }
 
-async function fetchQuestions(category) {
-    let res = '';
-    if (category === 'any') {
-        res = await fetch(`https://opentdb.com/api.php?amount=10`);
-    } else {
-        res = await fetch(`https://opentdb.com/api.php?amount=10&category=${category}&difficulty=medium&type=boolean`);
-    }
+// Update time
+function updateTime() {
+    time--;
+    timeEl.innerHTML = time + 's';
 
+    if (time === 0) {
+        time = 10;
+        // next slide
+        showNextSlide();
+        const slides = document.querySelectorAll(".slide");
+        // means last slide
+        if (currentSlide === slides.length - 1) {
+            clearInterval(timeInterval);
+            showEndingScreen();
+        }
+    }
+}
+
+async function fetchQuestions(category) {
+    res = await fetch(`https://opentdb.com/api.php?amount=10&category=${category}&difficulty=medium&type=boolean`);
     const data = await res.json();
     const results = data.results.map(results => { return { question: results.question, correctAnswer: results.correct_answer, incorectQuestions: results.incorrect_answers } });
     return results;
@@ -88,7 +106,6 @@ function showResults() {
         const answerContainer = answerContainers[questionNumber];
         const selector = `input[name=question${questionNumber}]:checked`;
         const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-        console.log(userAnswer);
 
         // if answer is correct
         if (userAnswer === currentQuestion.correctAnswer) {
@@ -107,29 +124,26 @@ function showResults() {
 
     // show number of correct answers out of total
     const finalScore = `${numCorrect} out of ${myQuestions.length}`;
-    if (gameScreen.classList.contains('play')) {
-        gameScreen.classList.remove('play');
-    }
-    endingScreen.classList.add('show');
+    showEndingScreen();
     resultsContainer.innerHTML = finalScore;
     window.sessionStorage.setItem('userScore', finalScore);
 }
 
+function showEndingScreen() {
+    if (gameScreen.classList.contains('play')) {
+        gameScreen.classList.remove('play');
+    }
+    endingScreen.classList.add('show');
+}
+
 function showSlide(n) {
     const slides = document.querySelectorAll(".slide");
-
     if (slides.length == 0) {
         return;
     }
     slides[currentSlide].classList.remove('active-slide');
     slides[n].classList.add('active-slide');
     currentSlide = n;
-    if (currentSlide === 0) {
-        previousButton.style.display = 'none';
-    }
-    else {
-        previousButton.style.display = 'inline-block';
-    }
     if (currentSlide === slides.length - 1) {
         nextButton.style.display = 'none';
         submitButton.style.display = 'inline-block';
@@ -138,18 +152,18 @@ function showSlide(n) {
         nextButton.style.display = 'inline-block';
         submitButton.style.display = 'none';
     }
-
 }
 
 function showNextSlide() {
     showSlide(currentSlide + 1);
+    time = 10;
 }
 
 function showPreviousSlide() {
     showSlide(currentSlide - 1);
 }
 
-function startTheGame() {
+function startGame() {
     fetchQuestions(selectCategory.value).then(res => {
         console.log(res);
         myQuestions = res;
@@ -157,6 +171,7 @@ function startTheGame() {
         gameScreen.classList.add('play');
         buildQuiz();
         showSlide(currentSlide);
+        timeInterval = setInterval(updateTime, 1000);
     });
 }
 
@@ -170,7 +185,6 @@ function startNewGame() {
 
 // Event listeners
 submitButton.addEventListener('click', showResults);
-previousButton.addEventListener("click", showPreviousSlide);
 nextButton.addEventListener("click", showNextSlide);
-startGame.addEventListener('click', startTheGame);
+startGameBtn.addEventListener('click', startGame);
 startAgain.addEventListener('click', startNewGame);

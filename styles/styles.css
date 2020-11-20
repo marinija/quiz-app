@@ -58,6 +58,10 @@ button:hover {
     background-color: #38a;
 }
 
+button:focus {
+    outline: none;
+}
+
 .slide {
     position: absolute;
     left: 0px;
@@ -243,4 +247,13 @@ form {
     .wrapper {
         justify-content: space-around;
     }
+}
+
+.banner {
+    background-color: #444444;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+    padding: 15px 0;
 }

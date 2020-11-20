@@ -5,6 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz App</title>
+    <meta name="description" content="Small Quiz Game where you will have 10 questions to answer to check your knowledge." />
+    <meta property="og:description" content="Small Quiz Game where you will have 10 questions to answer to check your knowledge." />
+    <meta property="og:title" content="Quiz App" />
+    <meta property="og:type" content="website" />
+    <meta name="keywords" content="Quiz App, fun, game, quiz game," />
+    <meta property="og:site_name" content="Quiz App" />
+    <meta name="robots" content="noodp" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 
@@ -13,7 +26,6 @@
         <h1 class="title">Start your quiz game</h1>
         <p>Select Category:</p>
         <select id="categories">
-            <option value="any">Any Category</option>
             <option value="12">Entertainment: Music</option>
             <option value="14">Entertainment: Television</option>
             <option value="15">Entertainment: Video Games</option>
@@ -30,12 +42,12 @@
     </section>
     <main class="game">
         <h1>Quiz Time</h1>
+        <p> Countdown: <span id="time">10s</span></p>
         <div class="wrapper">
             <div class="quiz-container">
                 <div id="quiz"></div>
             </div>
             <div class="buttons">
-                <button id="previous">Previous Question</button>
                 <button id="next">Next Question</button>
                 <button id="submit">Submit Quiz</button>
             </div>
@@ -48,6 +60,10 @@
         <br>
         <button id="start-again">Start Again</button>
     </section>
+
+    <footer class="banner">
+        <p> Created by: <b> Davor Mihajleski </b></p>
+    </footer>
     <script src="scripts/scripts.js"></script>
 </body>
 
